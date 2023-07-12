@@ -2,6 +2,12 @@
   import svelteLogo from "./assets/svelte.svg";
   import viteLogo from "/vite.svg";
   import Counter from "./lib/Counter.svelte";
+
+  import LivrariaAPI from "./services/LivrariaAPI";
+
+  async function bolado() {
+    const livros = LivrariaAPI.getLivros();
+  }
 </script>
 
 <main>
