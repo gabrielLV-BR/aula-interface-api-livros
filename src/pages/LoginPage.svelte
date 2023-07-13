@@ -1,7 +1,10 @@
 <script lang="ts">
-  import LivrariaAPI, { type LoginData } from "../services/LivrariaAPI";
   import { TokenStore } from "../stores/token";
-  import { Token } from "../types/AuthTypes";
+  import { Token, type LoginData } from "../types/AuthTypes";
+
+  let token = {} as Token;
+
+  TokenStore.subscribe((t) => (token = t));
 
   const authenticate = async (e: SubmitEvent) => {
     const formData = new FormData(e.target as HTMLFormElement);
@@ -19,6 +22,8 @@
 
     let token = await Token.Login(loginData);
 
+    console.log(token);
+
     TokenStore.set(token);
 
     console.log(token);
@@ -35,3 +40,7 @@
 
   <input type="submit" value="Login" />
 </form>
+
+{#if token}
+  {token.username}
+{/if}

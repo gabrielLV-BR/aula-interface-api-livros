@@ -1,3 +1,4 @@
+import { TokenStore } from "../stores/token";
 import type { Autor, Categoria, Editora, Livro } from "../types/LivrariaTypes";
 
 const API_ENDPOINT = "https://livraria-app.herokuapp.com/api/";
@@ -14,7 +15,7 @@ export type Filtro = {
 
 export class Token {
   private constructor(
-    private user: string,
+    public readonly username: string,
     private access: string,
     private refresh: string
   ) {}
@@ -32,16 +33,25 @@ export class Token {
 
     if (!response.ok) return null;
 
-    const token = (await response.json()) as Token;
+    const { access, refresh } = await response.json();
+
+    const token = new Token(loginData.username, access, refresh);
 
     localStorage.setItem(TOKEN_STORAGE_NAME, JSON.stringify(token));
+
+    TokenStore.set(token);
 
     return token;
   }
 
-  public static TryCachedLogin(): Token | null {
+  public static TryGetCachedLogin(): Token | null {
     const item = localStorage.getItem(TOKEN_STORAGE_NAME);
     return item ? JSON.parse(item) : null;
+  }
+
+  public static Logout() {
+    TokenStore.set(null);
+    localStorage.removeItem(TOKEN_STORAGE_NAME);
   }
 
   async getLivros(filtro?: Filtro): Promise<Livro[]> {
