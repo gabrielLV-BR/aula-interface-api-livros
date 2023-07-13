@@ -11,6 +11,7 @@ import type {
 const API_ENDPOINT = "https://livraria-app.herokuapp.com/api/";
 const TOKEN_STORAGE_NAME = "token";
 
+//TODO expirar token, refrescá-lo se e quando possível
 export class Token {
   private constructor(
     public readonly username: string,
