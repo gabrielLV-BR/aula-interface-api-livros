@@ -1,17 +1,15 @@
 import { TokenStore } from "../stores/token";
-import type { Autor, Categoria, Editora, Livro } from "../types/LivrariaTypes";
+import type {
+  Autor,
+  Categoria,
+  Editora,
+  Filtro,
+  Livro,
+  LoginData,
+} from "../types/LivrariaTypes";
 
 const API_ENDPOINT = "https://livraria-app.herokuapp.com/api/";
 const TOKEN_STORAGE_NAME = "token";
-
-export type LoginData = {
-  username: string;
-  password: string;
-};
-
-export type Filtro = {
-  [key: string]: any;
-};
 
 export class Token {
   private constructor(
@@ -46,7 +44,12 @@ export class Token {
 
   public static TryGetCachedLogin(): Token | null {
     const item = localStorage.getItem(TOKEN_STORAGE_NAME);
-    return item ? JSON.parse(item) : null;
+
+    if (!item) return null;
+
+    const { username, access, refresh } = JSON.parse(item);
+
+    return new Token(username, access, refresh);
   }
 
   public static Logout() {
@@ -54,19 +57,19 @@ export class Token {
     localStorage.removeItem(TOKEN_STORAGE_NAME);
   }
 
-  async getLivros(filtro?: Filtro): Promise<Livro[]> {
+  public async getLivros(filtro?: Filtro): Promise<Livro[]> {
     return this.getRecursoComFiltro("livros", filtro);
   }
 
-  async getEditoras(filtro?: Filtro): Promise<Editora[]> {
+  public async getEditoras(filtro?: Filtro): Promise<Editora[]> {
     return this.getRecursoComFiltro("editoras", filtro);
   }
 
-  async getAutores(filtro?: Filtro): Promise<Autor[]> {
+  public async getAutores(filtro?: Filtro): Promise<Autor[]> {
     return this.getRecursoComFiltro("autores", filtro);
   }
 
-  async getCategorias(filtro?: Filtro): Promise<Categoria[]> {
+  public async getCategorias(filtro?: Filtro): Promise<Categoria[]> {
     return this.getRecursoComFiltro("categorias", filtro);
   }
 
@@ -81,7 +84,8 @@ export class Token {
     if (!recurso.endsWith("/")) recurso += "/";
 
     const response = await this.fetch_with_token(
-      API_ENDPOINT + recurso + filter_string
+      API_ENDPOINT + recurso + filter_string,
+      {}
     );
     const data = await response.json();
     return data;
@@ -91,7 +95,8 @@ export class Token {
     input: RequestInfo | URL,
     init?: RequestInit
   ): Promise<Response> {
-    init.headers["Authenticate"] = `Bearer ${this.access}`;
-    return fetch(input, init);
+    if (!init.headers) init.headers = {};
+    init.headers["Authorization"] = `Bearer ${this.access}`;
+    return fetch(input, init ?? {});
   }
 }

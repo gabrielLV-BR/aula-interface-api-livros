@@ -25,3 +25,12 @@ export interface Editora {
   nome: string;
   site: string;
 }
+
+export type LoginData = {
+  username: string;
+  password: string;
+};
+
+export type Filtro = {
+  [key: string]: any;
+};

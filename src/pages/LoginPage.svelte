@@ -1,12 +1,13 @@
 <script lang="ts">
+  import { Token } from "../lib/Token";
   import { TokenStore } from "../stores/token";
-  import { Token, type LoginData } from "../types/AuthTypes";
+  import type { LoginData } from "../types/LivrariaTypes";
 
   let token = {} as Token;
 
   TokenStore.subscribe((t) => (token = t));
 
-  const authenticate = async (e: SubmitEvent) => {
+  const login = async (e: SubmitEvent) => {
     const formData = new FormData(e.target as HTMLFormElement);
 
     let loginData: LoginData = {
@@ -22,15 +23,11 @@
 
     let token = await Token.Login(loginData);
 
-    console.log(token);
-
     TokenStore.set(token);
-
-    console.log(token);
   };
 </script>
 
-<form on:submit|preventDefault={authenticate} action="">
+<form on:submit|preventDefault={login} action="">
   <label for="username">Usuário</label>
   <input type="text" name="username" id="username" />
   <label for="password">Senha</label>
