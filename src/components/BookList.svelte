@@ -15,6 +15,6 @@
 
 {#await getLivros() then livros}
   {#each livros as livro}
-    <p>{livro.categoria.nome}</p>
+    <p>{livro.ISBN}</p>
   {/each}
 {/await}

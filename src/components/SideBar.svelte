@@ -1,20 +1,22 @@
 <script lang="ts">
-  import type { SvelteComponent } from "svelte";
+  import AuthorList from "./AuthorList.svelte";
+  import BookList from "./BookList.svelte";
+  import EditorList from "./EditorList.svelte";
 
-  export let index: number;
-  export let setIndex: (i: number) => void;
-
-  let names = ["A", "B", "C"];
+  export let selectedTab;
+  export let setSelectedTab: (any) => void;
+  export let tabs = [];
+  export let tabImages = [];
 </script>
 
 <section class="container">
-  {#each [0, 1, 2] as i}
+  {#each tabs as tab, i}
     <button
       class="tab"
-      class:selected={i == index}
-      on:click={() => setIndex(i)}
+      on:click={() => setSelectedTab(tab)}
+      class:selected={tab == selectedTab}
     >
-      <p>A</p>
+      <img src={tabImages[i]} alt="Aba" />
     </button>
   {/each}
 </section>
@@ -41,6 +43,7 @@
     height: 3rem;
     background-color: white;
 
+    border: none;
     border-radius: 0.5rem;
 
     cursor: pointer;
