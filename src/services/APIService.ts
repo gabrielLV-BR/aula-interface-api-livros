@@ -28,7 +28,9 @@ export class APIService {
 
     const { access, refresh } = await response.json();
 
-    const token = new Token(loginData.username, access, refresh);
+    const timestamp = Date.now();
+
+    const token = new Token(loginData.username, access, refresh, timestamp);
 
     return token;
   }

@@ -3,14 +3,22 @@ import type { Autor, Categoria, Editora, Livro } from "../types/LivrariaTypes";
 
 //TODO expirar token, refrescá-lo se e quando possível
 export class Token {
+  // 20 minutos
+  private LIFETIME = 20 * 60 * 1000;
+
   public constructor(
     private username: string,
     private access: string,
-    private refresh: string
+    private refresh: string,
+    private creationTimestamp: number
   ) {
+    const remainingLife = this.getRemainingLife();
+
+    console.log(remainingLife);
+
     setTimeout(() => {
       this.attemptRefresh();
-    }, 30 * 60 * 1000);
+    }, remainingLife - 1000);
   }
 
   cleanup() {}
@@ -42,5 +50,11 @@ export class Token {
   private async attemptRefresh() {
     const newAccessToken = await APIService.RefreshToken(this.refresh);
     this.access = newAccessToken;
+  }
+
+  private getRemainingLife(): number {
+    const now = Date.now();
+    const expiration = new Date(this.creationTimestamp + this.LIFETIME);
+    return expiration.getTime() - now;
   }
 }
