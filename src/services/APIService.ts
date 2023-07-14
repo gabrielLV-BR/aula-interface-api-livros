@@ -33,16 +33,6 @@ export class APIService {
     return token;
   }
 
-  // public static TryGetCachedLogin(): Token | null {
-  //   const item = localStorage.getItem(TOKEN_STORAGE_NAME);
-
-  //   if (!item) return null;
-
-  //   const { username, access, refresh } = JSON.parse(item);
-
-  //   return new Token(username, access, refresh);
-  // }
-
   public static async getResourceFiltered(
     token: Token,
     recurso: string,

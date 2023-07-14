@@ -1,13 +1,19 @@
-import type { Token } from "../lib/Token";
+import { Token } from "../lib/Token";
 
 const TOKEN_STORAGE_NAME = "token";
 
-class TokenCache {
-  public static Cache(token: Token) {
+export class TokenCache {
+  public static Save(token: Token) {
     localStorage.setItem(TOKEN_STORAGE_NAME, JSON.stringify(token));
   }
 
-  public static GetCached() {}
-}
+  public static TryGet() {
+    const item = localStorage.getItem(TOKEN_STORAGE_NAME);
 
-export default new TokenCache();
+    if (!item) return null;
+
+    const { username, access, refresh } = JSON.parse(item);
+
+    return new Token(username, access, refresh);
+  }
+}

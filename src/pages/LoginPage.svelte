@@ -1,7 +1,8 @@
 <script lang="ts">
   import { Token } from "../lib/Token";
+  import { APIService, type LoginData } from "../services/APIService";
+  import { TokenCache } from "../services/TokenCache";
   import { TokenStore } from "../stores/token";
-  import type { LoginData } from "../types/LivrariaTypes";
 
   let token = {} as Token;
 
@@ -21,7 +22,9 @@
       else return; // bizarrice ocorreu
     }
 
-    let token = await Token.Login(loginData);
+    let token = await APIService.Login(loginData);
+
+    TokenCache.Save(token);
 
     TokenStore.set(token);
   };
@@ -39,5 +42,5 @@
 </form>
 
 {#if token}
-  {token.username}
+  {token.getUsername()}
 {/if}
