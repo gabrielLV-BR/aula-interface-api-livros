@@ -1,103 +1,46 @@
-import { TokenStore } from "../stores/token";
-import type {
-  Autor,
-  Categoria,
-  Editora,
-  Filtro,
-  Livro,
-  LoginData,
-} from "../types/LivrariaTypes";
-
-const API_ENDPOINT = "https://livraria-app.herokuapp.com/api/";
-const TOKEN_STORAGE_NAME = "token";
+import { APIService, type Filtro } from "../services/APIService";
+import type { Autor, Categoria, Editora, Livro } from "../types/LivrariaTypes";
 
 //TODO expirar token, refrescá-lo se e quando possível
 export class Token {
-  private constructor(
-    public readonly username: string,
+  public constructor(
+    private username: string,
     private access: string,
     private refresh: string
-  ) {}
-
-  public static async Login(loginData: LoginData): Promise<Token> {
-    const body = JSON.stringify(loginData);
-
-    const response = await fetch(API_ENDPOINT + "token/", {
-      body,
-      method: "post",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-
-    if (!response.ok) return null;
-
-    const { access, refresh } = await response.json();
-
-    const token = new Token(loginData.username, access, refresh);
-
-    localStorage.setItem(TOKEN_STORAGE_NAME, JSON.stringify(token));
-
-    TokenStore.set(token);
-
-    return token;
+  ) {
+    setTimeout(() => {
+      this.attemptRefresh();
+    }, 30 * 60 * 1000);
   }
 
-  public static TryGetCachedLogin(): Token | null {
-    const item = localStorage.getItem(TOKEN_STORAGE_NAME);
+  cleanup() {}
 
-    if (!item) return null;
-
-    const { username, access, refresh } = JSON.parse(item);
-
-    return new Token(username, access, refresh);
+  public getUsername(): string {
+    return this.username;
   }
 
-  public static Logout() {
-    TokenStore.set(null);
-    localStorage.removeItem(TOKEN_STORAGE_NAME);
+  public getAccessCode(): string {
+    return this.access;
   }
 
   public async getLivros(filtro?: Filtro): Promise<Livro[]> {
-    return this.getRecursoComFiltro("livros", filtro);
+    return APIService.getResourceFiltered(this, "livros", filtro);
   }
 
   public async getEditoras(filtro?: Filtro): Promise<Editora[]> {
-    return this.getRecursoComFiltro("editoras", filtro);
+    return APIService.getResourceFiltered(this, "editoras", filtro);
   }
 
   public async getAutores(filtro?: Filtro): Promise<Autor[]> {
-    return this.getRecursoComFiltro("autores", filtro);
+    return APIService.getResourceFiltered(this, "autores", filtro);
   }
 
   public async getCategorias(filtro?: Filtro): Promise<Categoria[]> {
-    return this.getRecursoComFiltro("categorias", filtro);
+    return APIService.getResourceFiltered(this, "categorias", filtro);
   }
 
-  private async getRecursoComFiltro(recurso: string, filtro?: Filtro) {
-    // transforma um mapa de filtros em uma string de parâmetros GET
-    const filter_string = filtro
-      ? Object.entries(filtro)
-          .map((e) => e[0] + "=" + e[1])
-          .reduce((p, c) => p + "&" + c)
-      : "";
-
-    if (!recurso.endsWith("/")) recurso += "/";
-
-    const response = await this.fetch_with_token(
-      API_ENDPOINT + recurso + filter_string,
-      {}
-    );
-    const data = await response.json();
-    return data;
-  }
-
-  private fetch_with_token(
-    input: RequestInfo | URL,
-    init?: RequestInit
-  ): Promise<Response> {
-    if (!init.headers) init.headers = {};
-    init.headers["Authorization"] = `Bearer ${this.access}`;
-    return fetch(input, init ?? {});
+  private async attemptRefresh() {
+    const newAccessToken = await APIService.RefreshToken(this.refresh);
+    this.access = newAccessToken;
   }
 }
