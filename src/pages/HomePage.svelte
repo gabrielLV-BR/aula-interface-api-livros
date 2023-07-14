@@ -6,6 +6,10 @@
   import EditorList from "../components/EditorList.svelte";
   import AuthorList from "../components/AuthorList.svelte";
 
+  import LivroSVG from "../assets/livros.svg";
+  import AutoresSVG from "../assets/autores.svg";
+  import EditorasSVG from "../assets/editoras.svg";
+
   let selectedTab = BookList;
 
   const setSelectedTab = (c: any) => {
@@ -13,7 +17,7 @@
   };
 
   export const tabs = [BookList, AuthorList, EditorList];
-  export const tabImages = ["", "", ""];
+  export const tabImages = [LivroSVG, AutoresSVG, EditorasSVG];
 
   let token = get(TokenStore);
 </script>
