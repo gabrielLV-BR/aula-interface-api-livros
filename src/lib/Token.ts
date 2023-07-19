@@ -14,8 +14,6 @@ export class Token {
   ) {
     const remainingLife = this.getRemainingLife();
 
-    console.log(remainingLife);
-
     setTimeout(() => {
       this.attemptRefresh();
     }, remainingLife - 1000);
@@ -23,27 +21,31 @@ export class Token {
 
   cleanup() {}
 
-  public getUsername(): string {
+  public jaExpirou() {
+    return this.getRemainingLife() < 0;
+  }
+
+  public nome(): string {
     return this.username;
   }
 
-  public getAccessCode(): string {
+  public acesso(): string {
     return this.access;
   }
 
-  public async getLivros(filtro?: Filtro): Promise<Livro[]> {
+  public async buscarLivros(filtro?: Filtro): Promise<Livro[]> {
     return APIService.getResourceFiltered(this, "livros", filtro);
   }
 
-  public async getEditoras(filtro?: Filtro): Promise<Editora[]> {
+  public async buscarEditoras(filtro?: Filtro): Promise<Editora[]> {
     return APIService.getResourceFiltered(this, "editoras", filtro);
   }
 
-  public async getAutores(filtro?: Filtro): Promise<Autor[]> {
+  public async buscarAutores(filtro?: Filtro): Promise<Autor[]> {
     return APIService.getResourceFiltered(this, "autores", filtro);
   }
 
-  public async getCategorias(filtro?: Filtro): Promise<Categoria[]> {
+  public async buscarCategorias(filtro?: Filtro): Promise<Categoria[]> {
     return APIService.getResourceFiltered(this, "categorias", filtro);
   }
 

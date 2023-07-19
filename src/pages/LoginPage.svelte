@@ -42,5 +42,5 @@
 </form>
 
 {#if token}
-  {token.getUsername()}
+  {token.nome()}
 {/if}

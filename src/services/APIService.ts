@@ -49,7 +49,7 @@ export class APIService {
 
     if (!recurso.endsWith("/")) recurso += "/";
 
-    const response = await this.fetch_with_token(
+    const response = await this.FetchWithToken(
       token,
       API_ENDPOINT + recurso + filter_string,
       {}
@@ -78,13 +78,13 @@ export class APIService {
     return data.refresh;
   }
 
-  private static fetch_with_token(
+  private static FetchWithToken(
     token: Token,
     input: RequestInfo | URL,
     init?: RequestInit
   ): Promise<Response> {
     if (!init.headers) init.headers = {};
-    init.headers["Authorization"] = `Bearer ${token.getAccessCode()}`;
+    init.headers["Authorization"] = `Bearer ${token.acesso()}`;
     return fetch(input, init ?? {});
   }
 }

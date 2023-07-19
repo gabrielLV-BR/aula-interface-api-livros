@@ -9,6 +9,7 @@
   import LivroSVG from "../assets/livros.svg";
   import AutoresSVG from "../assets/autores.svg";
   import EditorasSVG from "../assets/editoras.svg";
+  import type { Token } from "../lib/Token";
 
   let selectedTab = BookList;
 
@@ -19,7 +20,9 @@
   export const tabs = [BookList, AuthorList, EditorList];
   export const tabImages = [LivroSVG, AutoresSVG, EditorasSVG];
 
-  let token = get(TokenStore);
+  let token: Token = get(TokenStore);
+
+  TokenStore.subscribe((t) => (token = t));
 </script>
 
 <div class="container">
@@ -41,19 +44,12 @@
     justify-content: center;
   }
 
-  .container,
-  .container main {
-    width: 100%;
-    height: 100%;
-  }
-
   main .wrapper {
     display: none;
   }
 
   main .wrapper.current {
     display: block;
-    background-color: green;
-    height: 100%;
+    height: 100vh;
   }
 </style>

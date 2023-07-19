@@ -18,6 +18,9 @@ export class TokenCache {
 
     const { username, access, refresh, creationTimestamp } = JSON.parse(item);
 
-    return new Token(username, access, refresh, creationTimestamp);
+    const token = new Token(username, access, refresh, creationTimestamp);
+
+    if (token.jaExpirou()) return null;
+    else return token;
   }
 }
