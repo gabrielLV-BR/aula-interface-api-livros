@@ -34,7 +34,7 @@ export class Token {
   }
 
   public async adicionarLivro(livro: object) {
-    return APIService.postResource(this, "livros", livro);
+    return APIService.postResource(this, "livros/", livro);
   }
 
   public async buscarLivros(filtro?: Filtro): Promise<Livro[]> {

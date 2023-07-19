@@ -46,6 +46,7 @@
 
   main .wrapper {
     display: none;
+    margin-left: 3rem;
   }
 
   main .wrapper.current {

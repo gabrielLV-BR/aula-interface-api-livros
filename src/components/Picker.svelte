@@ -46,7 +46,7 @@
   }
 
   .option {
-    background-color: #00000045;
+    background-color: #00000020;
 
     padding: 0.3rem 0.4rem;
 

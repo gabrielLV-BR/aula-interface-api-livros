@@ -64,9 +64,17 @@ export class APIService {
     url: string,
     resource: object
   ) {
-    return this.FetchWithToken(token, url, {
+    const response = await this.FetchWithToken(token, API_ENDPOINT + url, {
       body: JSON.stringify(resource),
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
     });
+
+    const json = await response.json();
+
+    return response;
   }
 
   // retorna um novo token de acesso
