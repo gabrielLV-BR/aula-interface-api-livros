@@ -59,6 +59,16 @@ export class APIService {
     else return null;
   }
 
+  public static async postResource(
+    token: Token,
+    url: string,
+    resource: object
+  ) {
+    return this.FetchWithToken(token, url, {
+      body: JSON.stringify(resource),
+    });
+  }
+
   // retorna um novo token de acesso
   public static async RefreshToken(refresh: string): Promise<string> {
     const body = {

@@ -3,6 +3,7 @@
   import { TokenStore } from "../stores/token";
 
   import "../styles/tables.css";
+  import BookAdd from "./BookAdd.svelte";
   import Loading from "./Loading.svelte";
 
   export let token: Token;
@@ -16,7 +17,9 @@
   };
 </script>
 
-<table>
+<BookAdd {token} />
+
+<!-- <table>
   <thead>
     <th>ISBN</th>
     <th>Título</th>
@@ -56,3 +59,4 @@
     {/await}
   </tbody>
 </table>
+-->

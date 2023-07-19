@@ -51,5 +51,6 @@
   main .wrapper.current {
     display: block;
     height: 100vh;
+    overflow: auto;
   }
 </style>
