@@ -37,6 +37,10 @@ export class Token {
     return APIService.postResource(this, "livros/", livro);
   }
 
+  public async deletaLivro(livro: Livro) {
+    return APIService.deleteResource(this, "livros/" + livro.id + "/");
+  }
+
   public async buscarLivros(filtro?: Filtro): Promise<Livro[]> {
     return APIService.getResourceFiltered(this, "livros", filtro);
   }
@@ -47,6 +51,10 @@ export class Token {
 
   public async buscarAutores(filtro?: Filtro): Promise<Autor[]> {
     return APIService.getResourceFiltered(this, "autores", filtro);
+  }
+
+  public async deletaAutor(autor: Autor) {
+    return APIService.deleteResource(this, "autor/" + autor.id + "/");
   }
 
   public async buscarCategorias(filtro?: Filtro): Promise<Categoria[]> {

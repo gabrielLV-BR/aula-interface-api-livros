@@ -1,25 +1,32 @@
 <script lang="ts">
+  import { onMount } from "svelte";
   import type { Token } from "../lib/Token";
   import { TokenStore } from "../stores/token";
 
   import "../styles/tables.css";
-  import BookAdd from "./BookAdd.svelte";
+  import type { Livro } from "../types/LivrariaTypes";
   import Loading from "./Loading.svelte";
+  import { fly } from "svelte/transition";
 
   export let token: Token;
 
-  const getLivros = async () => {
-    const livros = await token.buscarLivros();
+  let livros: Livro[] = null;
+
+  const carregaLivros = async () => {
+    livros = await token.buscarLivros();
 
     if (livros == null) TokenStore.set(null);
-
-    return livros;
   };
+
+  const deletaLivro = async (livro: Livro) => {
+    livros = livros.filter((l) => l != livro);
+    token.deletaLivro(livro);
+  };
+
+  onMount(carregaLivros);
 </script>
 
-<BookAdd {token} />
-
-<!-- <table>
+<table>
   <thead>
     <th>ISBN</th>
     <th>Título</th>
@@ -28,17 +35,24 @@
     <th>Quantidade</th>
     <th>Autores</th>
     <th>Editora</th>
+    <th />
   </thead>
   <tbody>
-    {#await getLivros()}
+    {#if livros == null}
       <tr style="text-align: center;">
         <td colspan="7">
           <Loading />
         </td>
       </tr>
-    {:then livros}
+    {:else if livros.length == 0}
+      <tr style="text-align: center;">
+        <td colspan="7">
+          <h2>Sem livros cadastrados</h2>
+        </td>
+      </tr>
+    {:else}
       {#each livros as livro}
-        <tr>
+        <tr out:fly={{ x: 100, duration: 200 }}>
           <td>{livro.ISBN}</td>
           <td>{livro.titulo}</td>
           <td>{livro.categoria.nome}</td>
@@ -52,11 +66,11 @@
             </ul>
           </td>
           <td>{livro.editora.nome}</td>
+          <td>
+            <button on:click={() => deletaLivro(livro)}> X </button>
+          </td>
         </tr>
       {/each}
-    {:catch}
-      <h1>Erro carregando os livros.</h1>
-    {/await}
+    {/if}
   </tbody>
 </table>
--->

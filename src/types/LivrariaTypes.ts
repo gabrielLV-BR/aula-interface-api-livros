@@ -13,7 +13,8 @@ export interface Livro {
 
 export interface Categoria {
   id: number;
-  descricao: string;
+  nome?: string;
+  descricao?: string;
 }
 
 export interface Autor {

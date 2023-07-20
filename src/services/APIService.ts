@@ -72,7 +72,13 @@ export class APIService {
       },
     });
 
-    const json = await response.json();
+    return response;
+  }
+
+  public static async deleteResource(token: Token, url: string) {
+    const response = await this.FetchWithToken(token, API_ENDPOINT + url, {
+      method: "DELETE",
+    });
 
     return response;
   }

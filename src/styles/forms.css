@@ -62,6 +62,7 @@
   border: none;
   border-radius: 0.5rem;
   background-color: #00000020;
+  min-width: 5rem;
 }
 
 .campo input[type="submit"] {

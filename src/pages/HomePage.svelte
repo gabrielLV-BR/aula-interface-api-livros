@@ -10,14 +10,15 @@
   import AutoresSVG from "../assets/autores.svg";
   import EditorasSVG from "../assets/editoras.svg";
   import type { Token } from "../lib/Token";
+  import BookPage from "./BookPage.svelte";
 
-  let selectedTab = BookList;
+  let selectedTab = BookPage;
 
   const setSelectedTab = (c: any) => {
     selectedTab = c;
   };
 
-  export const tabs = [BookList, AuthorList, EditorList];
+  export const tabs = [BookPage, AuthorList, EditorList];
   export const tabImages = [LivroSVG, AutoresSVG, EditorasSVG];
 
   let token: Token = get(TokenStore);
