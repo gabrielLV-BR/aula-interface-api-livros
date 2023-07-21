@@ -30,16 +30,6 @@
       <ListGroupItem>Erro ao carregar editoras.</ListGroupItem>
     {/await}
   </ListGroup>
-  <hr />
-  <form action="">
-    <FormGroup class="form-group" floating label="Nome da editora">
-      <Input />
-    </FormGroup>
-    <FormGroup class="form-group" floating label="Site da editora">
-      <Input />
-    </FormGroup>
-    <Input type="submit" value="Adicionar" />
-  </form>
 </div>
 
 <style>

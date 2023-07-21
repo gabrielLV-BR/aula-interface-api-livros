@@ -43,12 +43,20 @@ export class Token {
 
   public async editarLivro(livro: Livro) {
     const livroObj = livro as any;
-    
+
     livroObj.categoria = livro.categoria.id;
     livroObj.editora = livro.editora.id;
-    livroObj.autores = livro.autores.map(a => a.id);
+    livroObj.autores = livro.autores.map((a) => a.id);
 
     return APIService.patchResource(this, "livros/" + livro.id + "/", livroObj);
+  }
+
+  public async adicionarAutor(nome: string) {
+    return APIService.postResource(this, "autores/", { nome });
+  }
+
+  public async adicionarEditora(nome: string, site: string) {
+    return APIService.postResource(this, "editoras/", { nome, site });
   }
 
   public async buscarLivros(filtro?: Filtro): Promise<Livro[]> {

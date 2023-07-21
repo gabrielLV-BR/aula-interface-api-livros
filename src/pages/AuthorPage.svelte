@@ -9,6 +9,8 @@
   } from "sveltestrap";
   import type { Token } from "../lib/Token";
 
+  let nomeAutor = "";
+
   export let token: Token;
 </script>
 
@@ -30,13 +32,6 @@
       <ListGroupItem>Erro ao carregar autores.</ListGroupItem>
     {/await}
   </ListGroup>
-  <hr />
-  <form action="">
-    <FormGroup class="form-group" floating label="Nome do autor">
-      <Input label="Nome do autor" />
-    </FormGroup>
-    <Input type="submit" value="Adicionar autor" />
-  </form>
 </div>
 
 <style>

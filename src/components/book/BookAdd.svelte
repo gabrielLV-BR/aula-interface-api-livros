@@ -40,7 +40,7 @@
       editora,
     };
 
-    form.parentElement.scrollTo({ top: 0, behavior: "smooth" });
+    form.scrollTo({ top: 0, behavior: "smooth" });
 
     const response = await token.adicionarLivro(livro);
 
@@ -93,7 +93,13 @@
   </FormGroup>
 
   <FormGroup floating label="Preço">
-    <Input {disabled} type="number" name="preco" placeholder="Digite o preço" />
+    <Input
+      {disabled}
+      step="0.01"
+      type="number"
+      name="preco"
+      placeholder="Digite o preço"
+    />
   </FormGroup>
 
   <FormGroup floating label="Quantidade">
@@ -130,5 +136,7 @@
 <style>
   form {
     margin: 1rem 0.5rem;
+    max-height: 90vh;
+    overflow: auto;
   }
 </style>

@@ -90,6 +90,7 @@
     <FormGroup floating label="Preço">
       <Input
         type="number"
+        step="0.01"
         bind:value={livro.preco}
         name="preco"
         placeholder="Digite o preço"
