@@ -3,18 +3,19 @@
   import { onMount } from "svelte";
   import { TokenStore } from "../../stores/token";
 
-  import Loading from "../Loading.svelte";
   import { Button, Spinner, Styles, Table } from "sveltestrap";
 
   import refreshSVG from "../../assets/refresh.svg";
-  import editSVG from "../../assets/lapis.svg";
 
   import { Token } from "../../lib/Token";
   import type { Livro } from "../../types/LivrariaTypes";
+  import BookView from "./BookView.svelte";
 
   export let token: Token;
 
   let livros: Livro[] = null;
+
+  let livroSelecionado: Livro | null = null;
 
   export let editaLivro: (livro: Livro) => void;
 
@@ -22,6 +23,10 @@
     livros = await token.buscarLivros();
 
     if (livros == null) TokenStore.set(null);
+  };
+
+  const mostraLivro = (l: Livro) => {
+    livroSelecionado = l;
   };
 
   const deletaLivro = async (livro: Livro) => {
@@ -68,6 +73,11 @@
         <tr
           class="book-item"
           out:fade={{ duration: 150 }}
+          on:click={(e) => {
+            if (e.ctrlKey) {
+              mostraLivro(livro);
+            }
+          }}
           on:dblclick={() => editaLivro(livro)}
         >
           <td>{livro.ISBN}</td>
@@ -92,7 +102,27 @@
   </tbody>
 </Table>
 
+{#if livroSelecionado != null}
+  <div
+    in:fade={{ duration: 150 }}
+    out:fade={{ duration: 150 }}
+    class="backdrop"
+  />
+  <BookView livro={livroSelecionado} fechar={() => (livroSelecionado = null)} />
+{/if}
+
 <style>
+  .backdrop {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+
+    background-color: #000000;
+    opacity: 0.5;
+  }
+
   :global(.table) {
     margin: 1rem 0.5rem;
   }
