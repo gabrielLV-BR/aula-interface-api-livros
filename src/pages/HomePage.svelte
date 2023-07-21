@@ -1,16 +1,15 @@
 <script lang="ts">
-  import { get } from "svelte/store";
   import { TokenStore } from "../stores/token";
-  import BookList from "../components/BookList.svelte";
-  import SideBar from "../components/SideBar.svelte";
-  import EditorList from "../components/EditorList.svelte";
-  import AuthorList from "../components/AuthorList.svelte";
 
   import LivroSVG from "../assets/livros.svg";
   import AutoresSVG from "../assets/autores.svg";
   import EditorasSVG from "../assets/editoras.svg";
+
   import type { Token } from "../lib/Token";
   import BookPage from "./BookPage.svelte";
+  import AuthorPage from "./AuthorPage.svelte";
+  import EditorPage from "./EditorPage.svelte";
+  import { TabContent, TabPane } from "sveltestrap";
 
   let selectedTab = BookPage;
 
@@ -18,41 +17,40 @@
     selectedTab = c;
   };
 
-  export const tabs = [BookPage, AuthorList, EditorList];
+  export const tabs = [BookPage, AuthorPage, EditorPage];
   export const tabImages = [LivroSVG, AutoresSVG, EditorasSVG];
 
-  let token: Token = get(TokenStore);
+  let token: Token;
 
   TokenStore.subscribe((t) => (token = t));
 </script>
 
 <div class="container">
-  <SideBar {selectedTab} {setSelectedTab} {tabs} {tabImages} />
-  <main>
-    {#each tabs as tab}
-      <div class="wrapper" class:current={tab == selectedTab}>
-        <svelte:component this={tab} {token} />
-      </div>
-    {/each}
-  </main>
+  <TabContent class="sidebar" vertical pills>
+    <TabPane tabId="book" tab="Livros">
+      <BookPage {token} />
+    </TabPane>
+    <TabPane tabId="author" tab="Autores">
+      <AuthorPage {token} />
+    </TabPane>
+    <TabPane tabId="editor" tab="Editoras">
+      <EditorPage {token} />
+    </TabPane>
+  </TabContent>
 </div>
 
 <style>
   .container {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
+    margin: 0;
+    position: relative;
+  }
+  .container :global(.sidebar li.nav-item > a) {
+    border-top-right-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
   }
 
-  main .wrapper {
-    display: none;
-    margin-left: 3rem;
-  }
-
-  main .wrapper.current {
-    display: block;
-    height: 100vh;
-    overflow: auto;
+  .container :global(.sidebar > ul.nav) {
+    border-right: 1px solid #cdcdcd !important;
+    height: 100vh !important;
   }
 </style>

@@ -1,4 +1,5 @@
 <script>
+  import { Styles } from "sveltestrap";
   import HomePage from "./pages/HomePage.svelte";
   import LoginPage from "./pages/LoginPage.svelte";
   import { TokenStore } from "./stores/token";
@@ -9,6 +10,8 @@
     estaLogado = t != null;
   });
 </script>
+
+<Styles />
 
 {#if estaLogado}
   <HomePage />

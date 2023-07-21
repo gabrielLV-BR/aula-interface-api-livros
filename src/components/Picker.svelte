@@ -24,7 +24,7 @@
 <div class="picker">
   <div class="side left">
     {#each opcoes as option, i}
-      <button on:click={() => escolher(i)} class="option"
+      <button on:click|preventDefault|capture={() => escolher(i)} class="option"
         >{pegarNomeDaOpcao(option)}</button
       >
     {/each}
@@ -32,9 +32,12 @@
   <div class="divider" />
   <div class="side right">
     {#each opcoesEscolhidas as option, i}
-      <button on:click={() => desescolher(i)} class="option"
-        >{pegarNomeDaOpcao(option)}</button
+      <button
+        on:click|preventDefault|capture={() => desescolher(i)}
+        class="option"
       >
+        {pegarNomeDaOpcao(option)}
+      </button>
     {/each}
   </div>
 </div>
@@ -46,12 +49,12 @@
   }
 
   .option {
-    background-color: #00000020;
+    background-color: #e4e9eb;
 
     padding: 0.3rem 0.4rem;
 
     border: none;
-    border-bottom: 1px solid #665599;
+    border-bottom: 1px solid #86b7fe;
 
     text-align: left;
     font-size: 1.1rem;
@@ -61,11 +64,11 @@
   }
 
   .option:hover {
-    background-color: #c4b9e6;
+    background-color: #c2dbfe;
   }
 
   .picker {
-    background-color: #dadada;
+    background-color: #e7e7e7;
 
     overflow: hidden;
 
@@ -79,7 +82,7 @@
     display: block;
     height: 50%;
     width: 1px;
-    background: black;
+    background: #808080;
     margin: 0 1rem;
   }
 
