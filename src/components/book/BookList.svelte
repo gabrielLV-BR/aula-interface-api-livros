@@ -4,7 +4,7 @@
   import { TokenStore } from "../../stores/token";
 
   import Loading from "../Loading.svelte";
-  import { Button, Styles, Table } from "sveltestrap";
+  import { Button, Spinner, Styles, Table } from "sveltestrap";
 
   import refreshSVG from "../../assets/refresh.svg";
   import editSVG from "../../assets/lapis.svg";
@@ -33,7 +33,7 @@
 </script>
 
 <Styles />
-<Table class="table">
+<Table class="table table-striped table-bordered table-condensed table-hover">
   <thead>
     <tr>
       <th>ISBN</th>
@@ -54,7 +54,7 @@
     {#if livros == null}
       <tr style="text-align: center;">
         <td colspan="7">
-          <Loading />
+          <Spinner color="primary" />
         </td>
       </tr>
     {:else if livros.length == 0}
@@ -93,6 +93,10 @@
 </Table>
 
 <style>
+  :global(.table) {
+    margin: 1rem 0.5rem;
+  }
+
   .no-books {
     font-size: 0.9rem;
     font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS",
@@ -108,12 +112,6 @@
   .book-item {
     cursor: pointer;
     user-select: none;
-    position: relative;
-    background-color: white;
-  }
-
-  .book-item:hover {
-    background-color: #dfdfdf;
   }
 
   .refresh-col {

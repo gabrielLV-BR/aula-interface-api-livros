@@ -126,3 +126,9 @@
 
   <Input color="primary" {disabled} type="submit" value="Adicionar" />
 </form>
+
+<style>
+  form {
+    margin: 1rem 0.5rem;
+  }
+</style>

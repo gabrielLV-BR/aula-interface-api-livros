@@ -44,10 +44,6 @@
 {/if}
 
 <style>
-  :global(.pane) {
-    padding: 2rem;
-  }
-
   .backdrop {
     position: fixed;
     left: 0;
