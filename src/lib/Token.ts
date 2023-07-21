@@ -41,6 +41,16 @@ export class Token {
     return APIService.deleteResource(this, "livros/" + livro.id + "/");
   }
 
+  public async editarLivro(livro: Livro) {
+    const livroObj = livro as any;
+    
+    livroObj.categoria = livro.categoria.id;
+    livroObj.editora = livro.editora.id;
+    livroObj.autores = livro.autores.map(a => a.id);
+
+    return APIService.patchResource(this, "livros/" + livro.id + "/", livroObj);
+  }
+
   public async buscarLivros(filtro?: Filtro): Promise<Livro[]> {
     return APIService.getResourceFiltered(this, "livros", filtro);
   }

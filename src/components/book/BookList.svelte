@@ -1,20 +1,22 @@
 <script lang="ts">
-  import { Button, Styles, Table } from "sveltestrap";
-
+  import { fade } from "svelte/transition";
   import { onMount } from "svelte";
   import { TokenStore } from "../../stores/token";
 
   import Loading from "../Loading.svelte";
-  import { Token } from "../../lib/Token";
-  import type { Livro } from "../../types/LivrariaTypes";
-
-  import { fade, fly } from "svelte/transition";
+  import { Button, Styles, Table } from "sveltestrap";
 
   import refreshSVG from "../../assets/refresh.svg";
+  import editSVG from "../../assets/lapis.svg";
+
+  import { Token } from "../../lib/Token";
+  import type { Livro } from "../../types/LivrariaTypes";
 
   export let token: Token;
 
   let livros: Livro[] = null;
+
+  export let editaLivro: (livro: Livro) => void;
 
   const carregaLivros = async () => {
     livros = await token.buscarLivros();
@@ -41,7 +43,7 @@
       <th>Quantidade</th>
       <th>Autores</th>
       <th>Editora</th>
-      <th>
+      <th class="refresh-col">
         <button class="refresh" on:click={carregaLivros}>
           <img src={refreshSVG} alt="" />
         </button>
@@ -63,7 +65,11 @@
       </tr>
     {:else}
       {#each livros as livro}
-        <tr out:fade={{ duration: 150 }}>
+        <tr
+          class="book-item"
+          out:fade={{ duration: 150 }}
+          on:dblclick={() => editaLivro(livro)}
+        >
           <td>{livro.ISBN}</td>
           <td>{livro.titulo}</td>
           <td>{livro.categoria.nome}</td>
@@ -77,7 +83,7 @@
             </ul>
           </td>
           <td>{livro.editora.nome}</td>
-          <td>
+          <td class="refresh-col">
             <Button on:click={() => deletaLivro(livro)}>X</Button>
           </td>
         </tr>
@@ -87,10 +93,6 @@
 </Table>
 
 <style>
-  :global(.table) {
-    min-width: 55rem;
-  }
-
   .no-books {
     font-size: 0.9rem;
     font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS",
@@ -101,6 +103,21 @@
     border: none;
     background-color: transparent;
     width: 1.5rem;
+  }
+
+  .book-item {
+    cursor: pointer;
+    user-select: none;
+    position: relative;
+    background-color: white;
+  }
+
+  .book-item:hover {
+    background-color: #dfdfdf;
+  }
+
+  .refresh-col {
+    width: 2rem;
   }
 
   .refresh img {
@@ -114,14 +131,5 @@
   .refresh img:hover {
     rotate: 360deg;
     transition: rotate 200ms ease;
-  }
-
-  @keyframes rotate {
-    from {
-      rotation: 0deg;
-    }
-    to {
-      rotation: 360deg;
-    }
   }
 </style>

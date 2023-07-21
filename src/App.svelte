@@ -4,6 +4,8 @@
   import LoginPage from "./pages/LoginPage.svelte";
   import { TokenStore } from "./stores/token";
 
+  // import "./app.css";
+
   let estaLogado = false;
 
   TokenStore.subscribe((t) => {

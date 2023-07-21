@@ -75,6 +75,22 @@ export class APIService {
     return response;
   }
 
+  public static async patchResource(
+    token: Token,
+    url: string,
+    resource: object
+  ) {
+    const response = await this.FetchWithToken(token, API_ENDPOINT + url, {
+      body: JSON.stringify(resource),
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    return response;
+  }
+
   public static async deleteResource(token: Token, url: string) {
     const response = await this.FetchWithToken(token, API_ENDPOINT + url, {
       method: "DELETE",
